@@ -31,5 +31,5 @@ ggpairs(Patient_correl,
         upper = list(continuous = wrap("cor", size = 3)),  # Pearson correlation values
         lower = list(continuous = "smooth"),               # scatterplots with regression line
         diag  = list(continuous = "densityDiag"))          # density plots on the diagonal
-w
+
 
