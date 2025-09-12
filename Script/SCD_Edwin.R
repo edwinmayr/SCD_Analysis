@@ -1,17 +1,17 @@
-library(readxl)
-
-read_excel("Data/Patient.xlsx")
-Patient <- read_excel("Data/Patient.xlsx")
-
-head(Patient)
-
-#from here on i will organize the data
 install.packages("janitor")
 install.packages("GGally")
+
+#from here on i will organize the data
 library(tidyverse)
 library(janitor)
 library(dplyr)
 library(GGally)
+library(readxl)
+library(ggplot2)
+
+read_excel("Data/Patient.xlsx")
+Patient <- read_excel("Data/Patient.xlsx")
+
 #Here i selected only the parameters i could have any interest in studying in my study
 names(Patient)
 Patient_alldata <- Patient %>% select (ID, Initials, Registry, Sample_date, Birthdate, Group_pt_HI, Age, Sex, Genotype, `Hb F`, LDH, `Bilirrubina total`, VCM, RDW, VPM, Hb, WBC, Seg, Lymph, Mono, Eos, Plat, Retc, `DD hemostasia (ng/mL)`, `FVW:Ag`, `FVW Activity (%)`, TGT_Lagtime, TGT_ETP, TGT_Peak, TGT_tt_Peak)
@@ -31,5 +31,28 @@ ggpairs(Patient_correl,
         upper = list(continuous = wrap("cor", size = 3)),  # Pearson correlation values
         lower = list(continuous = "smooth"),               # scatterplots with regression line
         diag  = list(continuous = "densityDiag"))          # density plots on the diagonal
+
+
+
+#to better visualize possible correlations i will use a heatmap *This would be the normal code but i had problems with the column names
+#so i had to run the command in the bottom
+#ggcorr(Patient_correl, 
+                    #      label = TRUE, 
+                     #     label_round = 2, 
+                      #    hjust = 0.75, 
+                       #   layout.exp = 1, 
+                        #  use = "pairwise.complete.obs")
+
+#Here make.names(colnames(Patient_correl)) Creates a vector of safe names for all columns (replaces spaces/special characters with dots).
+# and `colnames<-`(Patient_correl, ...) Temporarily assigns the safe names only within this function call. The original Patient_correl dataset remains unchanged.
+
+ggcorr( `colnames<-`(Patient_correl, make.names(colnames(Patient_correl))),
+  label = TRUE,
+  label_round = 2)
+
+
+
+
+
 
 
