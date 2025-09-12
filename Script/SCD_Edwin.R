@@ -26,6 +26,21 @@ Patient_alldataclean <- Patient_alldataclean %>% slice(-51)
 names(Patient)
 Patient_correl <- Patient_alldataclean %>% select (Age,`Hb F`, LDH, `Bilirrubina total`, VCM, RDW, VPM, Hb, WBC, Seg, Lymph, Mono, Eos, Plat, Retc, `DD hemostasia (ng/mL)`, `FVW:Ag`, `FVW Activity (%)`, TGT_Lagtime, TGT_ETP, TGT_Peak, TGT_tt_Peak)
 
+#Here i edited Patient_correl to give it better column names
+Patient_correl <- Patient_correl %>%
+  rename( Hb F= Hb_F,
+         `Bilirrubina total` = Bilirrubina_t,
+         `DD hemostasia (ng/mL)` = DD_hemo,
+         `FVW:Ag` = FVW_Ag,
+         `FVW Activity (%)` = FVW_At)
+
+Patient_correl <- Patient_correl %>%
+  rename( Hb_F = `Hb F`,
+          Bilirrubina_t = `Bilirrubina total`,
+          DD_hemo = `DD hemostasia (ng/mL)`,
+          FVW_Ag = `FVW:Ag`,
+          FVW_At = `FVW Activity (%)`)
+
 #Here i will do a pearson correlation using the GGally package for visualization
 ggpairs(Patient_correl,
         upper = list(continuous = wrap("cor", size = 3)),  # Pearson correlation values
@@ -34,23 +49,18 @@ ggpairs(Patient_correl,
 
 
 
-#to better visualize possible correlations i will use a heatmap *This would be the normal code but i had problems with the column names
-#so i had to run the command in the bottom
-#ggcorr(Patient_correl, 
-                    #      label = TRUE, 
-                     #     label_round = 2, 
-                      #    hjust = 0.75, 
-                       #   layout.exp = 1, 
-                        #  use = "pairwise.complete.obs")
+#to better visualize possible correlations i will use a heatmap 
 
-#Here make.names(colnames(Patient_correl)) Creates a vector of safe names for all columns (replaces spaces/special characters with dots).
-# and `colnames<-`(Patient_correl, ...) Temporarily assigns the safe names only within this function call. The original Patient_correl dataset remains unchanged.
-
-ggcorr( `colnames<-`(Patient_correl, make.names(colnames(Patient_correl))),
-  label = TRUE,
-  label_round = 2)
-
-
+ggcorr(Patient_correl, 
+       label = TRUE, 
+       label_round = 2, 
+       hjust = 0.75,
+       label_size = 1.8,
+       layout.exp = 1)
+   
+    
+   
+    
 
 
 
