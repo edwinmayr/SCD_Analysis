@@ -27,12 +27,6 @@ names(Patient)
 Patient_correl <- Patient_alldataclean %>% select (Age,`Hb F`, LDH, `Bilirrubina total`, VCM, RDW, VPM, Hb, WBC, Seg, Lymph, Mono, Eos, Plat, Retc, `DD hemostasia (ng/mL)`, `FVW:Ag`, `FVW Activity (%)`, TGT_Lagtime, TGT_ETP, TGT_Peak, TGT_tt_Peak)
 
 #Here i edited Patient_correl to give it better column names
-Patient_correl <- Patient_correl %>%
-  rename( Hb F= Hb_F,
-         `Bilirrubina total` = Bilirrubina_t,
-         `DD hemostasia (ng/mL)` = DD_hemo,
-         `FVW:Ag` = FVW_Ag,
-         `FVW Activity (%)` = FVW_At)
 
 Patient_correl <- Patient_correl %>%
   rename( Hb_F = `Hb F`,
@@ -57,9 +51,23 @@ ggcorr(Patient_correl,
        hjust = 0.75,
        label_size = 1.8,
        layout.exp = 1)
-   
-    
-   
+
+#Here i will setup a correlation with only patients
+SCD_correl <- Patient_correl %>% slice(1:50)
+
+#Here i will do a Pearson correlation with only the patients
+ggpairs (SCD_correl,
+         upper = list(continuous = wrap("cor", size = 3)),  
+         lower = list(continuous = "smooth"),               
+         diag  = list(continuous = "densityDiag"))         
+
+#Here i will make a heatmap of this
+ggcorr(SCD_correl,
+       label = TRUE,
+       label_round = 2,
+       hjust = 0.75,
+       label_size = 1.8,
+       layout.exp = 1)
     
 
 
