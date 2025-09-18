@@ -26,7 +26,7 @@ Patient_alldataclean <- Patient_alldataclean %>% slice(-51)
 
 #Here i selected only the parameters i could have any interest in studying but i removed non numeric values to calculate correlation
 names(Patient)
-Patient_correl <- Patient_alldataclean %>% select (Age,`Hb F`, LDH, `Bilirrubina total`, VCM, RDW, VPM, Hb, WBC, Seg, Lymph, Mono, Eos, Plat, Retc, `DD hemostasia (ng/mL)`, `FVW:Ag`, `FVW Activity (%)`, TGT_Lagtime, TGT_ETP, TGT_Peak, TGT_tt_Peak)
+Patient_correl <- Patient_alldataclean %>% select (Age, Genotype, `Hb F`, LDH, `Bilirrubina total`, VCM, RDW, VPM, Hb, WBC, Seg, Lymph, Mono, Eos, Plat, Retc, `DD hemostasia (ng/mL)`, `FVW:Ag`, `FVW Activity (%)`, TGT_Lagtime, TGT_ETP, TGT_Peak, TGT_tt_Peak)
 
 #Here i edited Patient_correl to give it better column names
 
@@ -95,4 +95,34 @@ ggplot(TGT_long, aes(x=Group, y=value, fill=Group)) +
   labs(x="", y="Value", title="TGT Parameters in SCD vs Control") +
   scale_fill_manual(values=c("Control"="lightblue", "SCD"="lightgreen")) +
   scale_color_manual(values=c("Control"="blue", "SCD"="darkgreen"))
+
+#I edited my dataset to make the Genotype a categorical value to make a scatter plot later on
+
+Patient_correl_Gen <- Patient_correl
+
+Patient_correl_Gen$Genotype <- factor(
+  Patient_correl_Gen$Genotype,
+  levels = c(0, 1, 2, 3),
+  labels = c("Control", "SC", "SS", "SB")
+)
+
+
+#Here i plotted the TGT parameters by Genotype
+
+# Select only TGT columns + Genotype
+TGT_data <- Patient_correl_Gen[, c("Genotype", "TGT_Lagtime", "TGT_ETP", "TGT_Peak", "TGT_tt_Peak")]
+
+# Reshape to long format
+TGT_long <- melt(TGT_data, id.vars = "Genotype")
+
+# Plot
+ggplot(TGT_long, aes(x=Genotype, y=value, fill=Genotype)) +
+  geom_boxplot(alpha=0.6, outlier.shape=NA) +
+  geom_jitter(aes(color=Genotype), width=0.2, size=2, alpha=0.7) +
+  facet_wrap(~variable, scales="free_y") +
+  theme_minimal(base_size=14) +
+  labs(x="", y="Value", title="TGT Parameters by Genotype") +
+  scale_fill_manual(values=c("Control"="lightblue", "SC"="lightpink", "SS"="lightgreen", "SB"="orange")) +
+  scale_color_manual(values=c("Control"="blue", "SC"="red", "SS"="darkgreen", "SB"="darkorange"))
+
 
