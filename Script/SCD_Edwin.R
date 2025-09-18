@@ -1,5 +1,6 @@
 install.packages("janitor")
 install.packages("GGally")
+install.packages("reshape2")
 
 #from here on i will organize the data
 library(tidyverse)
@@ -8,6 +9,7 @@ library(dplyr)
 library(GGally)
 library(readxl)
 library(ggplot2)
+library(reshape2)
 
 read_excel("Data/Patient.xlsx")
 Patient <- read_excel("Data/Patient.xlsx")
@@ -68,9 +70,29 @@ ggcorr(SCD_correl,
        hjust = 0.75,
        label_size = 1.8,
        layout.exp = 1)
-    
+#Here i will setup an object for correlation which includes just controls
+Control_correl <- Patient_correl %>% slice(51:75)
 
 
 
+#Here i plotted the TGT parameters in SCD VS Controls
 
+# Select only the TGT columns
+TGT_data <- Patient_correl[, c("TGT_Lagtime", "TGT_ETP", "TGT_Peak", "TGT_tt_Peak")]
+
+# Add a temporary Group vector (not stored in Patient_correl)
+Group <- c(rep("SCD", 50), rep("Control", 25))
+
+# Reshape to long format
+TGT_long <- melt(cbind(Group, TGT_data), id.vars="Group")
+
+# Plot
+ggplot(TGT_long, aes(x=Group, y=value, fill=Group)) +
+  geom_boxplot(alpha=0.6, outlier.shape=NA) +
+  geom_jitter(aes(color=Group), width=0.2, size=2, alpha=0.7) +
+  facet_wrap(~variable, scales="free_y") +
+  theme_minimal(base_size = 14) +
+  labs(x="", y="Value", title="TGT Parameters in SCD vs Control") +
+  scale_fill_manual(values=c("Control"="lightblue", "SCD"="lightgreen")) +
+  scale_color_manual(values=c("Control"="blue", "SCD"="darkgreen"))
 
