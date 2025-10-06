@@ -42,7 +42,7 @@ ggcorr(Da_correl,
        label_round = 2, 
        hjust = 0.75,
        label_size = 1.8,
-       layout.exp = 1) + ggtitle("Pearson")
+       layout.exp = 1) + ggtitle("Pearson") + theme(plot.title = element_text(hjust = 0.5, size = 16, face = "bold"))
 
 
 ggcorr(Da_correl, method = c("pairwise", "kendall"),
@@ -50,6 +50,6 @@ ggcorr(Da_correl, method = c("pairwise", "kendall"),
        label_round = 2, 
        hjust = 0.75,
        label_size = 1.8,
-       layout.exp = 1) + ggtitle("Kendall")
+       layout.exp = 1) + ggtitle("Kendall") + theme(plot.title = element_text(hjust = 0.5, size = 16, face = "bold"))
 
 
