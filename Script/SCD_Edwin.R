@@ -1,6 +1,7 @@
 install.packages("janitor")
 install.packages("GGally")
 install.packages("reshape2")
+install.packages ("ggpubr")
 
 #from here on i will organize the data
 library(tidyverse)
@@ -10,6 +11,7 @@ library(GGally)
 library(readxl)
 library(ggplot2)
 library(reshape2)
+library(ggpubr)
 
 read_excel("Data/Patient.xlsx")
 Patient <- read_excel("Data/Patient.xlsx")
@@ -126,3 +128,20 @@ ggplot(TGT_long, aes(x=Genotype, y=value, fill=Genotype)) +
   scale_color_manual(values=c("Control"="blue", "SC"="red", "SS"="darkgreen", "SB"="darkorange"))
 
 
+ggplot(TGT_long, aes(x=Group, y=value, fill=Group)) +
+  geom_boxplot(alpha=0.6, outlier.shape=NA) +
+  geom_jitter(aes(color=Group), width=0.2, size=2, alpha=0.7) +
+  facet_wrap(~variable, scales="free_y") +
+  stat_compare_means(
+    aes(label = paste0("p = ", ..p.format..)), 
+    method = "wilcox.test",                        # Mann–Whitney U test
+    method.args = list(exact = TRUE, correct = FALSE), # <- force exact, no approximation
+    label.y.npc = "top",
+    comparisons = list(c("Control", "SCD"))
+  ) +
+  theme_minimal(base_size = 14) +
+  labs(x="", y="Value", title="TGT Parameters in SCD vs Control") +
+  scale_fill_manual(values=c("Control"="lightblue", "SCD"="lightgreen")) +
+  scale_color_manual(values=c("Control"="blue", "SCD"="darkgreen"))
+
+asdasdasd
