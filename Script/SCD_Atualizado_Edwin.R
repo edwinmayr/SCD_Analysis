@@ -28,4 +28,28 @@ Da_correl <- Da_correl %>%
           FVW_At = `FVW Activity (%)`,
           sc5b9 = `sC5-b9`)
 
-#Here i will do a pearson correlation using the GGally package for visualization
+#Here i will do a pearson correlation using the GGally package for visualization (Dont run or will crash)
+ggpairs(Da_correl,
+        upper = list(continuous = wrap("cor", size = 3)),
+        lower = list(continuous = "smooth"),
+        diag  = list(continuous = "densityDiag")) +
+  theme_bw(base_size = 10)
+
+#to better visualize possible correlations i will use a heatmap (Pearson correlation coefficient.) pairwise complete observations.
+
+ggcorr(Da_correl, 
+       label = TRUE, 
+       label_round = 2, 
+       hjust = 0.75,
+       label_size = 1.8,
+       layout.exp = 1) + ggtitle("Pearson")
+
+
+ggcorr(Da_correl, method = c("pairwise", "kendall"),
+       label = TRUE, 
+       label_round = 2, 
+       hjust = 0.75,
+       label_size = 1.8,
+       layout.exp = 1) + ggtitle("Kendall")
+
+
