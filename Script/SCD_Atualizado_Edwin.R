@@ -35,6 +35,12 @@ ggpairs(Da_correl,
         diag  = list(continuous = "densityDiag")) +
   theme_bw(base_size = 10)
 
+ggpairs(Da_correl, method = c("pairwise", "spearman"),
+        upper = list(continuous = wrap("cor", size = 3)),
+        lower = list(continuous = "smooth"),
+        diag  = list(continuous = "densityDiag")) +
+  theme_bw(base_size = 10)
+
 #to better visualize possible correlations i will use a heatmap (Pearson correlation coefficient.) pairwise complete observations.
 
 ggcorr(Da_correl, 
@@ -52,4 +58,10 @@ ggcorr(Da_correl, method = c("pairwise", "kendall"),
        label_size = 1.8,
        layout.exp = 1) + ggtitle("Kendall") + theme(plot.title = element_text(hjust = 0.5, size = 16, face = "bold"))
 
+ggcorr(Da_correl, method = c("pairwise", "spearman"),
+       label = TRUE, 
+       label_round = 2, 
+       hjust = 0.75,
+       label_size = 1.8,
+       layout.exp = 1) + ggtitle("Spearman") + theme(plot.title = element_text(hjust = 0.5, size = 16, face = "bold"))
 
